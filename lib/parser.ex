@@ -15,7 +15,7 @@ defmodule ReportsHours.Parser do
   }
 
   def parse_file(filename) do
-    filename
+    "reports/#{filename}"
     |> File.stream!()
     |> Stream.map(fn line -> parse_line(line) end)
   end

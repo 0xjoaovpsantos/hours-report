@@ -1,8 +1,8 @@
 defmodule ReportsHours do
   alias ReportsHours.Parser
 
-  def build do
-    "report/gen_report.csv"
+  def build(filename) do
+    filename
     |> Parser.parse_file()
     |> Enum.reduce(initial_report(), fn line, report -> sum_values(line, report) end)
   end
