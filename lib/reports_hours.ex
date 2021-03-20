@@ -10,8 +10,9 @@ defmodule ReportsHours do
   defp sum_values(line, report) do
     all_hours = sum_all_hours(line, report.all_hours)
     hours_per_month = sum_hours_per_month(line, report.hours_per_month)
+    hours_per_year = sum_hours_per_year(line, report.hours_per_year)
 
-    build_report(all_hours, hours_per_month)
+    build_report(all_hours, hours_per_month, hours_per_year)
   end
 
   defp sum_all_hours([name, hours, _day, _month, _year], all_hours) do
@@ -29,10 +30,20 @@ defmodule ReportsHours do
     Map.put(hours_per_month, name, new_month)
   end
 
-  defp build_report(all_hours, hours_per_month) do
+  defp sum_hours_per_year([name, hours, _day, _month, year], hours_per_year) do
+    previous_historic = Map.get(hours_per_year, name, %{})
+    previous_hours_year = Map.get(previous_historic, year, 0)
+
+    new_year = Map.put(previous_historic, year, hours + previous_hours_year)
+
+    Map.put(hours_per_year, name, new_year)
+  end
+
+  defp build_report(all_hours, hours_per_month, hours_per_year) do
     %{
       all_hours: all_hours,
-      hours_per_month: hours_per_month
+      hours_per_month: hours_per_month,
+      hours_per_year: hours_per_year
     }
   end
 
